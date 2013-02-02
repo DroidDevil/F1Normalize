@@ -13,12 +13,11 @@ import com.google.gson.stream.JsonReader;
 
 public abstract class AbstractNetworkOAuthTaskF1<T> extends AbstractNetworkOAuthTask<T> {
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private F1NProtocol mProtocol;
 
-    public AbstractNetworkOAuthTaskF1(F1NProtocol protocol, NetworkDataHandler<T> handler) {
-        super(handler);
+    public AbstractNetworkOAuthTaskF1(F1NProtocol protocol) {
         mProtocol = protocol;
     }
 

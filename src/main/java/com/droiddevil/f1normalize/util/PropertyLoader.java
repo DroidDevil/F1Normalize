@@ -1,4 +1,4 @@
-package com.droiddevil.f1normalize;
+package com.droiddevil.f1normalize.util;
 
 import java.io.IOException;
 import java.io.InputStream;

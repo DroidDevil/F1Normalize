@@ -75,26 +75,18 @@ public abstract class AbstractNetworkOAuthTask<T> implements Runnable {
     private boolean mCancelled;
 
     /**
-     * Constructor.
+     * Adds this task to the task executor service for processing.
      * 
      * @param dataHandler
-     *            The data handler to use.
+     *            The data handler for this task.
      */
-    public AbstractNetworkOAuthTask(final NetworkDataHandler<T> dataHandler) {
+    public void execute(final NetworkDataHandler<T> dataHandler) {
         mDataHandler = new NetworkDataHandler<T>() {
 
             @Override
             public void onDataReady(final T data) {
                 if (!mCancelled) {
                     dataHandler.onDataReady(data);
-                    dataHandler.onStopLoad();
-                }
-            }
-
-            @Override
-            public void onDataNotModified() {
-                if (!mCancelled) {
-                    dataHandler.onDataNotModified();
                     dataHandler.onStopLoad();
                 }
             }
@@ -112,16 +104,8 @@ public abstract class AbstractNetworkOAuthTask<T> implements Runnable {
                 throw new IllegalStateException("Don't call me ever!");
             }
         };
-    }
 
-    /**
-     * Adds this task to the task executor service for processing.
-     * 
-     * @return A handle back to this task.
-     */
-    public AbstractNetworkOAuthTask<T> execute() {
         mFuture = THREAD_POOL_EXECUTOR.submit(this);
-        return this;
     }
 
     public void cancel() {

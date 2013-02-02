@@ -23,14 +23,14 @@ public class F1NProtocol {
         mProperties = properties;
     }
 
-    public OAuthService getF1Service() {
+    public synchronized OAuthService getF1Service() {
         if (mF1Service == null) {
             mF1Service = F1ServiceFactory.create(mProperties);
         }
         return mF1Service;
     }
 
-    public Token getToken() {
+    public synchronized Token getToken() {
         if (mToken == null) {
             final String PROP_ACCESS_TOKEN = "oauth.access_token";
             final String PROP_TOKEN_SECRET = "oauth.token_secret";
