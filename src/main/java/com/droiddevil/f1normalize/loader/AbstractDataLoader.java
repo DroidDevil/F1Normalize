@@ -1,43 +1,39 @@
-package com.droiddevil.f1normalize;
+package com.droiddevil.f1normalize.loader;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.droiddevil.f1normalize.model.Household;
-import com.droiddevil.f1normalize.model.HouseholdSearch;
-import com.droiddevil.f1normalize.network.F1HouseholdSearchTask;
 import com.droiddevil.f1normalize.network.NetworkDataError;
 import com.droiddevil.f1normalize.network.NetworkDataHandler;
+import com.droiddevil.f1normalize.network.NetworkTask;
 
-public class F1LoaderHousehold {
+public abstract class AbstractDataLoader<DATA, TASKDATA, TASK extends NetworkTask<TASKDATA>> {
 
-    private static final int RECORDS_PER_PAGE = 50;
-
-    private F1NProtocol mProtocol;
-
-    private Set<Household> mData = Collections.synchronizedSet(new HashSet<Household>());
+    private Set<DATA> mData = Collections.synchronizedSet(new HashSet<DATA>());
 
     private AtomicInteger mCounter = new AtomicInteger(1);
 
     private boolean mIsFirstLoad = true;
 
-    final NetworkDataHandler<HouseholdSearch> handler = new NetworkDataHandler<HouseholdSearch>() {
+    final NetworkDataHandler<TASKDATA> handler = new NetworkDataHandler<TASKDATA>() {
 
         @Override
-        public void onDataReady(HouseholdSearch data) {
+        public void onDataReady(TASKDATA data) {
             if (mIsFirstLoad) {
                 mIsFirstLoad = false;
 
-                for (int i = 0; i < data.getResults().getAdditionalPages(); i++) {
+                int additionalPages = getAdditionalPages(data);
+
+                for (int i = 0; i < additionalPages; i++) {
                     mCounter.incrementAndGet();
                     createTask(i + 2).execute(this);
                 }
             }
 
-            mData.addAll(data.getResults().getHousehold());
+            mData.addAll(getAllRecords(data));
         }
 
         @Override
@@ -56,8 +52,7 @@ public class F1LoaderHousehold {
         }
     };
 
-    public void load(F1NProtocol protocol) {
-        mProtocol = protocol;
+    public void load() {
         createTask(1).execute(handler);
 
         try {
@@ -68,10 +63,17 @@ public class F1LoaderHousehold {
             e.printStackTrace();
         }
 
-        System.out.println("Loaded " + mData.size() + " Households");
+        System.out.println("Loaded " + mData.size() + " records");
     }
 
-    private F1HouseholdSearchTask createTask(int page) {
-        return new F1HouseholdSearchTask(new Date(0), page, RECORDS_PER_PAGE, mProtocol);
+    public Set<DATA> getData() {
+        return mData;
     }
+
+    protected abstract TASK createTask(int page);
+
+    protected abstract int getAdditionalPages(TASKDATA data);
+
+    protected abstract List<DATA> getAllRecords(TASKDATA data);
+
 }

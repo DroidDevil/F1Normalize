@@ -4,9 +4,50 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import com.droiddevil.f1normalize.normalizer.NormalizerName;
 import com.google.gson.annotations.SerializedName;
 
 public class Person implements Serializable {
+
+    public abstract static class IdUri {
+
+        @SerializedName("@id")
+        private String id;
+
+        @SerializedName("@uri")
+        private String uri;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getUri() {
+            return uri;
+        }
+
+        public void setUri(String uri) {
+            this.uri = uri;
+        }
+
+    }
+
+    public abstract static class IdUriName extends IdUri {
+
+        private String name;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+    }
 
     public static class HouseholdMemberType implements Serializable {
 
@@ -46,47 +87,15 @@ public class Person implements Serializable {
 
     }
 
-    public static class Status implements Serializable {
+    public static class Status extends IdUriName implements Serializable {
 
         private static final long serialVersionUID = 1L;
-
-        @SerializedName("@id")
-        private long id;
-
-        @SerializedName("@uri")
-        private String uri;
-
-        private String name;
 
         private String comment;
 
         private Date date;
 
         private SubStatus subStatus;
-
-        public long getId() {
-            return id;
-        }
-
-        public void setId(long id) {
-            this.id = id;
-        }
-
-        public String getUri() {
-            return uri;
-        }
-
-        public void setUri(String uri) {
-            this.uri = uri;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
 
         public String getComment() {
             return comment;
@@ -114,81 +123,17 @@ public class Person implements Serializable {
 
     }
 
-    public static class SubStatus implements Serializable {
+    public static class SubStatus extends IdUriName implements Serializable {
 
         private static final long serialVersionUID = 1L;
-
-        @SerializedName("@id")
-        private long id;
-
-        @SerializedName("@uri")
-        private String uri;
-
-        private String name;
-
-        public long getId() {
-            return id;
-        }
-
-        public void setId(long id) {
-            this.id = id;
-        }
-
-        public String getUri() {
-            return uri;
-        }
-
-        public void setUri(String uri) {
-            this.uri = uri;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
 
     }
 
-    public static class Occupation implements Serializable {
+    public static class Occupation extends IdUriName implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
-        @SerializedName("@id")
-        private long id;
-
-        @SerializedName("@uri")
-        private String uri;
-
-        private String name;
-
         private String description;
-
-        public long getId() {
-            return id;
-        }
-
-        public void setId(long id) {
-            this.id = id;
-        }
-
-        public String getUri() {
-            return uri;
-        }
-
-        public void setUri(String uri) {
-            this.uri = uri;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
 
         public String getDescription() {
             return description;
@@ -200,79 +145,15 @@ public class Person implements Serializable {
 
     }
 
-    public static class School implements Serializable {
+    public static class School extends IdUriName implements Serializable {
 
         private static final long serialVersionUID = 1L;
-
-        @SerializedName("@id")
-        private long id;
-
-        @SerializedName("@uri")
-        private String uri;
-
-        private String name;
-
-        public long getId() {
-            return id;
-        }
-
-        public void setId(long id) {
-            this.id = id;
-        }
-
-        public String getUri() {
-            return uri;
-        }
-
-        public void setUri(String uri) {
-            this.uri = uri;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
 
     }
 
-    public static class Denomination implements Serializable {
+    public static class Denomination extends IdUriName implements Serializable {
 
         private static final long serialVersionUID = 1L;
-
-        @SerializedName("@id")
-        private long id;
-
-        @SerializedName("@uri")
-        private String uri;
-
-        private String name;
-
-        public long getId() {
-            return id;
-        }
-
-        public void setId(long id) {
-            this.id = id;
-        }
-
-        public String getUri() {
-            return uri;
-        }
-
-        public void setUri(String uri) {
-            this.uri = uri;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
 
     }
 
@@ -328,15 +209,9 @@ public class Person implements Serializable {
 
     }
 
-    public static class Attribute implements Serializable {
+    public static class Attribute extends IdUri implements Serializable {
 
         private static final long serialVersionUID = 1L;
-
-        @SerializedName("@id")
-        private long id;
-
-        @SerializedName("@uri")
-        private String uri;
 
         AttributePerson person;
 
@@ -351,22 +226,6 @@ public class Person implements Serializable {
         private Date createdDate;
 
         private Date lastUpdatedDate;
-
-        public long getId() {
-            return id;
-        }
-
-        public void setId(long id) {
-            this.id = id;
-        }
-
-        public String getUri() {
-            return uri;
-        }
-
-        public void setUri(String uri) {
-            this.uri = uri;
-        }
 
         public AttributePerson getPerson() {
             return person;
@@ -426,71 +285,17 @@ public class Person implements Serializable {
 
     }
 
-    public static class AttributePerson implements Serializable {
+    public static class AttributePerson extends IdUri implements Serializable {
 
         private static final long serialVersionUID = 1L;
-
-        @SerializedName("@id")
-        private long id;
-
-        @SerializedName("@uri")
-        private String uri;
-
-        public long getId() {
-            return id;
-        }
-
-        public void setId(long id) {
-            this.id = id;
-        }
-
-        public String getUri() {
-            return uri;
-        }
-
-        public void setUri(String uri) {
-            this.uri = uri;
-        }
 
     }
 
-    public static class AttributeGroup implements Serializable {
+    public static class AttributeGroup extends IdUriName implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
-        @SerializedName("@id")
-        private long id;
-
-        @SerializedName("@uri")
-        private String uri;
-
-        private String name;
-
         private AttributeGroupAttribute attribute;
-
-        public long getId() {
-            return id;
-        }
-
-        public void setId(long id) {
-            this.id = id;
-        }
-
-        public String getUri() {
-            return uri;
-        }
-
-        public void setUri(String uri) {
-            this.uri = uri;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
 
         public AttributeGroupAttribute getAttribute() {
             return attribute;
@@ -502,41 +307,9 @@ public class Person implements Serializable {
 
     }
 
-    public static class AttributeGroupAttribute implements Serializable {
+    public static class AttributeGroupAttribute extends IdUriName implements Serializable {
 
         private static final long serialVersionUID = 1L;
-
-        @SerializedName("@id")
-        private long id;
-
-        @SerializedName("@uri")
-        private String uri;
-
-        private String name;
-
-        public long getId() {
-            return id;
-        }
-
-        public void setId(long id) {
-            this.id = id;
-        }
-
-        public String getUri() {
-            return uri;
-        }
-
-        public void setUri(String uri) {
-            this.uri = uri;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
 
     }
 
@@ -556,15 +329,9 @@ public class Person implements Serializable {
 
     }
 
-    public static class Communication implements Serializable {
+    public static class Communication extends IdUri implements Serializable {
 
         private static final long serialVersionUID = 1L;
-
-        @SerializedName("@id")
-        private long id;
-
-        @SerializedName("@uri")
-        private String uri;
 
         private CommunicationHousehold household;
 
@@ -585,22 +352,6 @@ public class Person implements Serializable {
         private Date createdDate;
 
         private Date lastUpdatedDate;
-
-        public long getId() {
-            return id;
-        }
-
-        public void setId(long id) {
-            this.id = id;
-        }
-
-        public String getUri() {
-            return uri;
-        }
-
-        public void setUri(String uri) {
-            this.uri = uri;
-        }
 
         public CommunicationHousehold getHousehold() {
             return household;
@@ -684,97 +435,21 @@ public class Person implements Serializable {
 
     }
 
-    public static class CommunicationHousehold implements Serializable {
+    public static class CommunicationHousehold extends IdUri implements Serializable {
 
         private static final long serialVersionUID = 1L;
-
-        @SerializedName("@id")
-        private long id;
-
-        @SerializedName("@uri")
-        private String uri;
-
-        public long getId() {
-            return id;
-        }
-
-        public void setId(long id) {
-            this.id = id;
-        }
-
-        public String getUri() {
-            return uri;
-        }
-
-        public void setUri(String uri) {
-            this.uri = uri;
-        }
 
     }
 
-    public static class CommunicationPerson implements Serializable {
+    public static class CommunicationPerson extends IdUri implements Serializable {
 
         private static final long serialVersionUID = 1L;
-
-        @SerializedName("@id")
-        private long id;
-
-        @SerializedName("@uri")
-        private String uri;
-
-        public long getId() {
-            return id;
-        }
-
-        public void setId(long id) {
-            this.id = id;
-        }
-
-        public String getUri() {
-            return uri;
-        }
-
-        public void setUri(String uri) {
-            this.uri = uri;
-        }
 
     }
 
-    public static class CommunicationType implements Serializable {
+    public static class CommunicationType extends IdUriName implements Serializable {
 
         private static final long serialVersionUID = 1L;
-
-        @SerializedName("@id")
-        private long id;
-
-        @SerializedName("@uri")
-        private String uri;
-
-        private String name;
-
-        public long getId() {
-            return id;
-        }
-
-        public void setId(long id) {
-            this.id = id;
-        }
-
-        public String getUri() {
-            return uri;
-        }
-
-        public void setUri(String uri) {
-            this.uri = uri;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
 
     }
 
@@ -804,16 +479,20 @@ public class Person implements Serializable {
 
     private String prefix;
 
+    @NormalizerName
     private String firstName;
 
+    @NormalizerName
     private String lastName;
 
     private String suffix;
 
+    @NormalizerName
     private String middleName;
 
     private String goesByName;
 
+    @NormalizerName
     private String formerName;
 
     private String gender;

@@ -8,29 +8,28 @@ import org.scribe.model.Verb;
 
 import com.droiddevil.f1normalize.F1NProtocol;
 import com.droiddevil.f1normalize.F1NURL;
-import com.droiddevil.f1normalize.model.HouseholdSearch;
+import com.droiddevil.f1normalize.model.PeopleSearch;
 
-public class F1PeopleSearchTask extends AbstractNetworkOAuthTaskF1Paginate<HouseholdSearch> {
+public class F1PeopleSearchTask extends AbstractNetworkOAuthTaskF1Paginate<PeopleSearch> {
 
     private String mQuery;
 
     private Date mLastUpdatedDate;
 
-    public F1PeopleSearchTask(String query, int page, int recordsPerPage, F1NProtocol protocol,
-            NetworkDataHandler<HouseholdSearch> handler) {
+    public F1PeopleSearchTask(String query, int page, int recordsPerPage, F1NProtocol protocol) {
         super(protocol, page, recordsPerPage);
         mQuery = query;
     }
 
     public F1PeopleSearchTask(Date lastUpdatedDate, int page, int recordsPerPage,
-            F1NProtocol protocol, NetworkDataHandler<HouseholdSearch> handler) {
+            F1NProtocol protocol) {
         super(protocol, page, recordsPerPage);
         mLastUpdatedDate = lastUpdatedDate;
     }
 
     @Override
-    protected Class<HouseholdSearch> getTypeClass() {
-        return HouseholdSearch.class;
+    protected Class<PeopleSearch> getTypeClass() {
+        return PeopleSearch.class;
     }
 
     @Override

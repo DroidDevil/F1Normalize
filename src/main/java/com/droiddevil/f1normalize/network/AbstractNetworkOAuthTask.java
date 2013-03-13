@@ -3,14 +3,7 @@ package com.droiddevil.f1normalize.network;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.http.HttpStatus;
@@ -29,13 +22,7 @@ import org.scribe.oauth.OAuthService;
  * @param <T>
  *            The type of data that is being fetched.
  */
-public abstract class AbstractNetworkOAuthTask<T> implements Runnable {
-
-    private static final int CORE_POOL_SIZE = 5;
-
-    private static final int MAXIMUM_POOL_SIZE = 128;
-
-    private static final int KEEP_ALIVE = 1;
+public abstract class AbstractNetworkOAuthTask<T> implements NetworkTask<T> {
 
     /**
      * Accept-Encoding HTTP header name. Request only.
@@ -52,22 +39,6 @@ public abstract class AbstractNetworkOAuthTask<T> implements Runnable {
      */
     private static final String HTTP_PAYLOAD_ENCODING_GZIP = "gzip";
 
-    private static final ThreadFactory sThreadFactory = new ThreadFactory() {
-        private final AtomicInteger mCount = new AtomicInteger(1);
-
-        @Override
-        public Thread newThread(Runnable r) {
-            return new Thread(r, "NetworkTask #" + mCount.getAndIncrement());
-        }
-    };
-
-    private static final BlockingQueue<Runnable> sPoolWorkQueue = new LinkedBlockingQueue<Runnable>(
-            10);
-
-    public static final ExecutorService THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(
-            CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE, TimeUnit.SECONDS, sPoolWorkQueue,
-            sThreadFactory);
-
     private NetworkDataHandler<T> mDataHandler;
 
     private Future<?> mFuture;
@@ -80,6 +51,7 @@ public abstract class AbstractNetworkOAuthTask<T> implements Runnable {
      * @param dataHandler
      *            The data handler for this task.
      */
+    @Override
     public void execute(final NetworkDataHandler<T> dataHandler) {
         mDataHandler = new NetworkDataHandler<T>() {
 
@@ -105,7 +77,7 @@ public abstract class AbstractNetworkOAuthTask<T> implements Runnable {
             }
         };
 
-        mFuture = THREAD_POOL_EXECUTOR.submit(this);
+        mFuture = NetworkExecutor.execute(this);
     }
 
     public void cancel() {
